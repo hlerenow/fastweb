@@ -1,0 +1,4 @@
+tile/
+*.txt
+
+node_modules/

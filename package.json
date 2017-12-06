@@ -1,0 +1,30 @@
+{
+  "name": "earthquantum",
+  "version": "0.0.1",
+  "description": "大地量子官网",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "gulp browser-sync",
+    "build": "gulp build",
+    "deploy": "gulp production"
+  },
+  "author": "hlere",
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^2.18.13",
+    "del": "^3.0.0",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^4.0.0",
+    "gulp-clean-css": "^3.9.0",
+    "gulp-htmlmin": "^3.0.0",
+    "gulp-imagemin": "^4.0.0",
+    "gulp-less": "^3.3.2",
+    "gulp-uglify": "^3.0.0",
+    "gulp.spritesmith": "^6.7.0",
+    "run-sequence": "^2.2.0"
+  },
+  "dependencies": {
+    "normalize.css": "^7.0.0"
+  }
+}

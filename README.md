@@ -59,8 +59,10 @@
 
 #### 命令
 
+
 ````
  npm run dev // 运行开发服务器
 
- npm run build // 编译为生产环境文件
+ npm run build // 编译为生产环境文件 , 图片压缩默认使用 smushit, 只支持压缩 jpg、png, 更多的图片压缩方式参见 gulpfile.js
+ ...
 ````

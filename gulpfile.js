@@ -1,18 +1,27 @@
 var gulp = require('gulp');
-var browserSync = require('browser-sync');
-var reload = browserSync.reload;
-var less = require('gulp-less');
 var path = require('path');
 
+var browserSync = require('browser-sync');
+var reload = browserSync.reload;
+
 var uglify = require('gulp-uglify');
-var autoprefixer = require('gulp-autoprefixer');
+
+var less = require('gulp-less');
 var cleanCSS = require('gulp-clean-css');
+var autoprefixer = require('gulp-autoprefixer');
+
 var htmlmin = require('gulp-htmlmin');
+const imageminPngquant = require('imagemin-pngquant');
+
 var del = require('del');
 var runSequence = require('run-sequence');
 
 var spritesmith = require('gulp.spritesmith');
 var imagemin = require('gulp-imagemin');
+/* yaho 压缩 */
+var smushit = require('gulp-smushit');
+/* tiny  */
+var tiny = require('gulp-tinypng-nokey');
 
 /* gulp 错误处理 */
 var plumber = require('gulp-plumber');
@@ -130,7 +139,6 @@ gulp.task('dist:less', function() {
             compatibility: 'ie8'
         }))
         .pipe(rename(function(path) {
-            console.log(path);
             path.basename = path.dirname;
             path.dirname = '';
         }))        
@@ -148,10 +156,33 @@ gulp.task('dist:html', function() {
         .pipe(gulp.dest('./dist'))
 });
 
-/* 压缩图片 */
+/* 压缩图片 使用 imagemin，支持所有图片格式，压缩率较低，质量高*/
 gulp.task('dist:imagemin', function() {
     return gulp.src(['src/images/**/*', '!src/images/sprites/**/*'])
-        .pipe(imagemin())
+        .pipe(imagemin({
+            interlaced: true,
+            progressive: true,
+            optimizationLevel: 5,
+            svgoPlugins: [{removeViewBox: false}],
+            use: [imageminPngquant()]
+        }))
+        .pipe(smushit())        
+        .pipe(gulp.dest('dist/images'))
+});
+
+/* 压缩图片 使用 tiny, 支持多种图片格式, 压缩率较高，图片质量较低 */
+gulp.task('dist:imagemin', function() {
+    return gulp.src(['src/images/**/*', '!src/images/sprites/**/*'])
+        .pipe(tiny())        
+        .pipe(smushit())        
+        .pipe(gulp.dest('dist/images'))
+});
+/* 压缩图片 使用 smushit，只支持jpg、png，质量适中 */
+gulp.task('dist:smushit', function() {
+    return gulp.src(['src/images/**/*', '!src/images/sprites/**/*'])
+        .pipe(smushit({
+            verbose: true
+        }))        
         .pipe(gulp.dest('dist/images'))
 });
 
@@ -171,7 +202,7 @@ gulp.task('dist:clearBuild', function() {
 /* 编译生产文件 */
 gulp.task('build', function(callback) {
     runSequence(
-        'dist:clearDist', ['dist:js', 'dist:less', 'dist:html', 'dist:imagemin', 'dist:moveFile'], 'dist:clearBuild',
+        'dist:clearDist', ['dist:js', 'dist:less', 'dist:html', 'dist:smushit', 'dist:moveFile'], 'dist:clearBuild',
         callback
     )
 });

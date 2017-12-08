@@ -137,13 +137,13 @@ gulp.task('dist:less', function() {
         .pipe(gulp.dest('./dist/css'));
 });
 
-
 /* 压缩 html  */
 gulp.task('dist:html', function() {
-    return gulp.src('./src/*.html')
+    return gulp.src('./src/**/*.html')
         .pipe(htmlmin({
             collapseWhitespace: true,
-            minifyCSS: 
+            minifyCSS: true,
+            minifyJS: true
         }))
         .pipe(gulp.dest('./dist'))
 });
@@ -192,3 +192,4 @@ gulp.task('production', ['deploy:clear'], function() {
     return gulp.src(['./dist/**/*'])
         .pipe(gulp.dest('/var/www/html/'))
 });
+

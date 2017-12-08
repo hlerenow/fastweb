@@ -12,7 +12,10 @@ var del = require('del');
 var runSequence = require('run-sequence');
 
 var spritesmith = require('gulp.spritesmith');
-var imagemin = require('gulp-imagemin')
+var imagemin = require('gulp-imagemin');
+
+/* gulp 错误处理 */
+var plumber = require('gulp-plumber');
 
 // 静态服务器
 gulp.task('browser-sync',['less','watch-less', 'sprites', 'watch-sprites'],function() {
@@ -28,12 +31,9 @@ gulp.task('browser-sync',['less','watch-less', 'sprites', 'watch-sprites'],funct
 gulp.task('less', function () {
   console.log('编译less');
   return gulp.src('./src/less/comm.less')
+          .pipe(plumber())
           .pipe(less())
           .pipe(gulp.dest('./src/css'))
-          .on('error', function(e) {
-            console.log(e),
-            this.end();
-          })
           .pipe(reload({stream: true}));
 });
 

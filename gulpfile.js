@@ -166,15 +166,13 @@ gulp.task('dist:imagemin', function() {
             svgoPlugins: [{removeViewBox: false}],
             use: [imageminPngquant()]
         }))
-        .pipe(smushit())        
         .pipe(gulp.dest('dist/images'))
 });
 
 /* 压缩图片 使用 tiny, 支持多种图片格式, 压缩率较高，图片质量较低 */
-gulp.task('dist:imagemin', function() {
+gulp.task('dist:tiny', function() {
     return gulp.src(['src/images/**/*', '!src/images/sprites/**/*'])
         .pipe(tiny())        
-        .pipe(smushit())        
         .pipe(gulp.dest('dist/images'))
 });
 /* 压缩图片 使用 smushit，只支持jpg、png，质量适中 */
@@ -202,7 +200,7 @@ gulp.task('dist:clearBuild', function() {
 /* 编译生产文件 */
 gulp.task('build', function(callback) {
     runSequence(
-        'dist:clearDist', ['dist:js', 'dist:less', 'dist:html', 'dist:smushit', 'dist:moveFile'], 'dist:clearBuild',
+        'dist:clearDist', ['dist:js', 'dist:less', 'dist:html', 'dist:imagemin', 'dist:moveFile'], 'dist:clearBuild',
         callback
     )
 });
